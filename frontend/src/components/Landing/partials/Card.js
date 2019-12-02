@@ -151,11 +151,12 @@ class Card extends Component {
         }else{
             is_user = true
         }
-
+        
         var favoriteButton
-        if(is_user){
+        if(is_user == true){
             favoriteButton = <li> <a onClick={() => this.checkFavorite(this.props.car_id)}><i className={"fa fa-heart "+"favorite-"+this.props.car_id} aria-hidden="true"></i></a> </li>
         }else{
+            console.log("false")
             favoriteButton = <li> <a onClick={() => this.checkFavorite(this.props.car_id)}><i className={"fa fa-heart-o "+"favorite-"+this.props.car_id} aria-hidden="true"></i></a> </li>
         }
 
