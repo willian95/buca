@@ -38,8 +38,7 @@ class AdvancedSearch extends Component {
         }
 
         axios.get(process.env.REACT_APP_API_URL+"/cars/latest", config).then(response => {
-			console.log("advanced search")
-			console.log(response)
+
             this.setState({
                 posts: response.data
             })
