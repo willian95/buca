@@ -138,14 +138,15 @@ class Card extends Component {
             var user_id = window.localStorage.getItem('user_id')
             var i = 0;
             
-            if(favorites.length > 0){
+            console.log("favoritos")
+            console.log(favorites)
                 for(i = 0; i < favorites.length; i++){
                 
                     if(favorites[i].user_id == user_id){
                         is_user = true
                     }
                 }
-            }
+            
         }else{
             is_user = true
         }
