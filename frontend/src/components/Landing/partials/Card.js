@@ -35,7 +35,7 @@ class Card extends Component {
             }
         }
 
-		axios.post(process.env.REACT_APP_API_URL+"/favorite", {"car_id": id}, config).then(response => {
+		axios.post(process.env.REACT_APP_API_URL+"/favorite/store", {"car_id": id}, config).then(response => {
 			
 			if(response.data.success == true){
                 toast.success(response.data.message)

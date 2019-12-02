@@ -41,7 +41,7 @@ Route.post('/api/cars/update', 'CarController.update').middleware('auth')
 
 Route.post('/api/search', 'SearchController.search')
 
-Route.post('/api/favorite', 'FavoriteController.store')
+Route.post('/api/favorite/store', 'FavoriteController.store')
 Route.post('/api/favorite/remove', 'FavoriteController.remove')
 Route.post('/api/favorite/check', 'FavoriteController.isFavorite')
 Route.get('/api/favorite/count', 'FavoriteController.countFavorites')
