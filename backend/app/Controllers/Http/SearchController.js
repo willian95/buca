@@ -1,13 +1,14 @@
 'use strict'
 const Database = use('Database')
 const Notification = use('App/Models/Notification')
+const SearchedCar = use('App/Models/SearchedCar')
 //const { broadcast } = require('../../utils/socket.utils');
 
 class SearchController {
 
     async search({request, response}){
 
-        const {has_model, has_brand, has_string, model_id, brand_id, searchString} = request.all()
+        const {has_string, searchString} = request.all()
         var data = []
 
         if(has_string == 1){
@@ -48,6 +49,43 @@ class SearchController {
         }   
 
         return response.json(data)
+
+    }
+
+    async storeSearchedCars({request, response}){
+
+        const {cars} = request.all()
+
+        cars.forEach((item, index) => {
+
+            this.storeCars(item)
+
+        })
+
+        return response.json({"success": true})
+
+    }
+
+    async storeCars(item){
+        
+        let searchedCar =await SearchedCar.query().where('car_id', item.id).first()
+
+        if(searchedCar != null){
+
+            let countView = await SearchedCar.query().where('car_id', item.id).pluck('countView')
+            countView = parseInt(countView) + 1
+
+            searchedCar.countView = countView
+            await searchedCar.save()      
+
+        }else{
+
+            let storeSearchedCar = new SearchedCar
+            storeSearchedCar.car_id = item.id
+            storeSearchedCar.countView = 1;
+            await storeSearchedCar.save()
+
+        }
 
     }
 

@@ -12,7 +12,7 @@ class LoginController {
 
         let accessToken = await auth.generate(user)
 
-        return response.json({"success": true, "message":"Logged In", "user_id": user.id, "token": accessToken, "username": user.username, "image": user.image})
+        return response.json({"success": true, "message":"Logged In", "user_id": user.id, "token": accessToken, "username": user.username, "image": user.image, "rol_id": user.role_id})
 
     }
 

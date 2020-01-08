@@ -18,10 +18,12 @@ class RoleSeeder {
   async run () {
 
     let roleUser = new Role()
+    roleUser.id = 1
     roleUser.role = 'User'
     await roleUser.save()
 
     let roleAdmin = new Role()
+    roleUser.id = 2
     roleAdmin.role = 'Admin'
     await roleAdmin.save()
     

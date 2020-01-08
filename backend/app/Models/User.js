@@ -43,6 +43,14 @@ class User extends Model {
     return this.hasMany('App/Models/Favorite')
   }
 
+  buyer(){
+    return this.hasMany('App/Models/Sale', 'id', 'buyer_id')
+  }
+
+  seller(){
+    return this.hasMany('App/Models/Sale', 'id', 'seller_id')
+  }
+
 }
 
 module.exports = User

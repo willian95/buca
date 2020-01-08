@@ -17,6 +17,10 @@ class Car extends Model {
         return this.hasMany('App/Models/Favorite')
     }
     
+    views(){
+        return this.hasMany('App/Models/View')
+    }
+
 }
 
 module.exports = Car

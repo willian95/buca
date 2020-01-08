@@ -3,10 +3,12 @@
 const Car = use('App/Models/Car')
 const Model = use('App/Models/CarModel')
 const CarImage = use('App/Models/CarImage')
+const Database = use('Database')
 const Brand = use('App/Models/CarBrand')
 const { validate } = use('Validator')
 const Helpers = use('Helpers')
 const CarTag = use('App/Models/CarTag')
+
 
 class CarController {
 
@@ -15,8 +17,6 @@ class CarController {
         try {
             var uniqid = require('uniqid');
             const {car_model_id, price, description, file1Image, file2Image, file3Image, file4Image} = request.all()
-
-            //return response.json(request.all())
 
             const rules = {
                 car_model_id: 'required|integer',
@@ -86,8 +86,6 @@ class CarController {
 
             })
 
-            
-
             if(request.file('file2Image')){
                 let imageName = uniqid()
                 const pic = request.file('file2Image')
@@ -136,6 +134,7 @@ class CarController {
             
 
         } catch (e) {
+            console.log(e)
             response.json(e)
         }
 
@@ -146,22 +145,41 @@ class CarController {
         
         let user = await auth.getUser()
 
-        let cars = await Car.query().where('user_id', user.id).where('deleted_at', null).with('model').with('model.brand').fetch()
+        let cars = await Car.query().where('user_id', user.id).where('sold_at', null).where('deleted_at', null).with('model').with('model.brand').fetch()
         return response.json(cars)
 
     }
 
     async latestPosts({response}){
 
-        let cars = await Car.query().where('deleted_at', null).with('favorites').with('model').with('model.brand').with('user').orderBy('id', 'desc').limit(12).fetch()
+        let cars = await Car.query().where('deleted_at', null).where('sold_at', null).with('favorites').with('model').with('model.brand').with('user').orderBy('id', 'desc').limit(12).fetch()
         return response.json(cars);
+
+    }
+
+    async mostViewed({response, auth}){
+        
+        let posts = []
+        let car = null
+        let views = await Database.raw("SELECT views.car_id, COUNT(*) FROM views JOIN cars ON views.car_id = cars.id WHERE cars.deleted_at IS NULL AND cars.sold_at IS NULL GROUP BY views.car_id ORDER BY COUNT(*) DESC LIMIT 6")
+
+        for(var item of views[0]) {
+            car = await Car.query().with('favorites').with('model').with('model.brand').with('user').where('id', item.car_id).fetch()
+            posts.push(car)
+        }
+        return response.json(posts)
+
+    }
+
+    async returnCarInfo(car_id){
 
     }
 
     async show({params, response}){    
 
-        let car = await Car.query().where('id', params.id).where('deleted_at', null).with('model').with('model.brand').with('user').fetch()
-        let carCount = await Car.query().where('id', params.id).where('deleted_at', null).with('model').with('model.brand').with('user').count()
+        let car = await Car.query().where('id', params.id).where('deleted_at', null).where('sold_at', null).with('model').with('model.brand').with('user').fetch()
+        let carCount = await Car.query().where('id', params.id).where('deleted_at', null).where('sold_at', null).with('model').with('model.brand').with('user').count()
+        
         let images = await CarImage.query().where('car_id', params.id).fetch()
         if(carCount){
             return response.json({"success": true, "car":car, "images":images})
@@ -307,6 +325,12 @@ class CarController {
             response.json(e.message)
         }        
 
+    }
+
+    async countAll({response}){
+
+        let carCount = await Car.query().where('deleted_at', null).where('sold_at', null).count()
+        return response.json({"success": true, count: carCount})
     }
 
 }
