@@ -83,8 +83,12 @@ class NavbarLanding extends Component {
     logout(){
         window.localStorage.removeItem('token')
         window.localStorage.removeItem('user_id')
+        window.localStorage.removeItem('username')
+        window.localStorage.removeItem('image')
+        window.localStorage.removeItem('rol_id')
         this.setState({
-            redirectLanding: true
+            redirectLanding: true,
+            auth: false
         })
     }
 
@@ -95,7 +99,11 @@ class NavbarLanding extends Component {
         let register
         let userDropdown
         if (this.state.auth == true) {
-            dashboard = <Link to="/dashboard">Dashboard</Link>;
+            if(window.localStorage.getItem('rol_id') == 1){
+                dashboard = <Link to="/dashboard">Dashboard</Link>;
+            }else{
+                dashboard = <Link to="/admin">Dashboard</Link>;
+            }
 
             userDropdown = <li className="dropdown">
                                 <a href="#" onClick={() => this.isOpenUserDropdown()} className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img className="img-circle resize" alt="" src={this.state.url+"/"+window.localStorage.getItem('image')} /> <span className="myname hidden-xs"> {this.state.name} </span> <span className="caret"></span></a>
@@ -129,7 +137,7 @@ class NavbarLanding extends Component {
                         <div className="row">
                             <div className="header-top-left col-md-6 col-sm-6 col-xs-12 hidden-xs">
                                 <ul className="listnone">
-                                    <li><a href="about.html"><i className="fa fa-heart-o" aria-hidden="true"></i> About {this.props.auth}</a></li>
+                                    {/*<li><a href="about.html"><i className="fa fa-heart-o" aria-hidden="true"></i> About {this.props.auth}</a></li>
                                     <li><a href="faqs.html"><i className="fa fa-folder-open-o" aria-hidden="true"></i> FAQS</a></li>
                                     <li className="dropdown">
                                         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i className="fa fa-globe" aria-hidden="true"></i> Language <span className="caret"></span></a>
@@ -140,7 +148,7 @@ class NavbarLanding extends Component {
                                             <li><a href="#">Russian</a></li>
                                             <li><a href="#">chinese</a></li>
                                         </ul>
-                                    </li>
+                                    </li>*/}
                                 </ul>
                             </div>
                             <div className="header-right col-md-6 col-sm-6 col-xs-12 ">

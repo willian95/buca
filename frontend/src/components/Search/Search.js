@@ -15,6 +15,7 @@ class Search extends Component {
         }
 
         this.showDetails = this.showDetails.bind(this)
+        this.storeSearch = this.storeSearch.bind(this)
 
     }
 
@@ -24,6 +25,18 @@ class Search extends Component {
             carId: id
         })
 
+    }
+
+    storeSearch(){
+
+        axios.post(process.env.REACT_APP_API_URL+"/search/store", {cars: this.state.cars}).then(response => {
+            console.log(response)
+        })
+
+    }
+
+    componentDidMount(){
+        this.storeSearch()
     }
 
     render() {

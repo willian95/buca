@@ -4,6 +4,13 @@ import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import Moment from 'react-moment';
+import 'moment-timezone';
+
+import {
+    Link
+  } from "react-router-dom";
+
 class Card extends Component {
 
     constructor(props){
@@ -164,27 +171,32 @@ class Card extends Component {
             <div>
                 <div className="col-md-4 pointer" id={this.props.id}>
                     <div className="category-grid-box-1">
-                        <div className="image" onClick={() => this.showDetails(this.props.car_id)}>
-                            <img alt="Carspot" src={process.env.REACT_APP_SERVER_URL+"/"+this.props.image} className="img-responsive card-img" />
-                            <div className="ribbon popular"></div>
-                            <div className="price-tag">
-                                <div className="price"><span>${this.props.price}</span></div>
+                        <Link to={"car/"+this.props.car_id}>
+                            <div className="image">
+                                <img alt="Carspot" src={process.env.REACT_APP_SERVER_URL+"/"+this.props.image} className="img-responsive card-img" />
+                                <div className="ribbon popular"></div>
+                                <div className="price-tag">
+                                    <div className="price"><span>${this.props.price}</span></div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="short-description-1 clearfix" onClick={() => this.showDetails(this.props.car_id)}>
-                            {/*<div className="category-title"> <span><a href="#">Car & Bikes</a></span> </div>*/}
-                            <h3><a title="" href="single-page-listing.html">{this.props.brand}</a></h3>
-                            <p className="location"><i className="fa fa-map-marker"></i>{this.props.model}</p>
-                            {/*<ul className="list-unstyled">
-                                <li><a href="javascript:void(0)"><i className="flaticon-gas-station-1"></i>Diesel</a></li>
-                                <li><a href="javascript:void(0)"><i className="flaticon-dashboard"></i>35,000 km</a></li>
-                                <li><a href="javascript:void(0)"><i className="flaticon-engine-2"></i>1800 cc</a></li>
-                                <li><a href="javascript:void(0)"><i className="flaticon-car-2"></i>SUV</a></li>
-                                <li><a href="javascript:void(0)"><i className="flaticon-cogwheel-outline"></i>White</a></li>
-                            </ul>*/}
-                        </div>
+                        </Link>
+                        
+                        <Link to={"car/"+this.props.car_id}>
+                            <div className="short-description-1 clearfix">
+                                {/*<div className="category-title"> <span><a href="#">Car & Bikes</a></span> </div>*/}
+                                <h3><a title="" href="single-page-listing.html">{this.props.brand}</a></h3>
+                                <p className="location"><i className="fa fa-map-marker"></i>{this.props.model}</p>
+                                {/*<ul className="list-unstyled">
+                                    <li><a href="javascript:void(0)"><i className="flaticon-gas-station-1"></i>Diesel</a></li>
+                                    <li><a href="javascript:void(0)"><i className="flaticon-dashboard"></i>35,000 km</a></li>
+                                    <li><a href="javascript:void(0)"><i className="flaticon-engine-2"></i>1800 cc</a></li>
+                                    <li><a href="javascript:void(0)"><i className="flaticon-car-2"></i>SUV</a></li>
+                                    <li><a href="javascript:void(0)"><i className="flaticon-cogwheel-outline"></i>White</a></li>
+                                </ul>*/}
+                            </div>
+                        </Link>
                         <div className="ad-info-1">
-                            <p><i className="flaticon-calendar"></i> &nbsp;<span>5 Days ago</span> </p>
+                            <p><i className="flaticon-calendar"></i> &nbsp;<span><Moment locale="es" fromNow>{this.props.publish_date}</Moment></span> </p>
                             <ul className="pull-right">
                                 {favoriteButton}
                                 {/*<li> <a ><i className="flaticon-message"></i></a></li>*/}

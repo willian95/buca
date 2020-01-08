@@ -40,7 +40,7 @@ class Landing extends Component {
 	render() {
 		return (
 			<div className="App">
-				<NavbarLanding auth={this.state.auth}/>	
+				<NavbarLanding/>	
 				<Banner />
 				<AdvancedSearch />
 				<Service />

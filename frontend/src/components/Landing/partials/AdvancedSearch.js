@@ -31,17 +31,25 @@ class AdvancedSearch extends Component {
 	
 	fetchCars(){
 
-        let config = {
-            headers: {
-                Authorization: 'Bearer ' + window.localStorage.getItem('token'),
-            }
-        }
+		let config = null
 
-        axios.get(process.env.REACT_APP_API_URL+"/cars/latest", config).then(response => {
+		if(window.localStorage.getItem('token') != null){
+			config = {
+				headers: {
+					Authorization: 'Bearer ' + window.localStorage.getItem('token'),
+				}
+			}
+		}
+
+        
+
+        axios.get(process.env.REACT_APP_API_URL+"/cars/mostViewed", config).then(response => {
+
+			console.log(response)
 
             this.setState({
                 posts: response.data
-            })
+			})
 
         }).catch(error => {
 
@@ -127,7 +135,7 @@ class AdvancedSearch extends Component {
 					
 							<div className="heading-panel">
 								<div className="col-xs-12 col-md-12 col-sm-12 left-side">
-									<h1>Más <span className="heading-color"> Bucados</span></h1>
+									<h1>Más <span className="heading-color"> Vistos</span></h1>
 								</div>
 							</div>
 					
@@ -135,7 +143,7 @@ class AdvancedSearch extends Component {
                                 <div className="col-md-12 col-xs-12 col-sm-12">
                             
 									{this.state.posts.map((car, i) =>
-										<Card key={i} favorite={car.favorites} car_id={car.id} brand={car.model.brand.brand} model={car.model.model} price={car.price} image={car.image}/>
+										<Card key={i} favorite={car[0].favorites} car_id={car[0].id} brand={car[0].model.brand.brand} model={car[0].model.model} price={car[0].price} image={car[0].image} publish_date={car[0].created_at}/>
 									)}
                         
                             	</div>

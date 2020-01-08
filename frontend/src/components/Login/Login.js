@@ -16,7 +16,8 @@ class Login extends Component {
             email:'',
             password:'',
             recoveryEmail:'',
-            redirect:false
+            redirectUser:false,
+            redirectAdmin:false,
         };
 
         this.login = this.login.bind(this)
@@ -57,12 +58,24 @@ class Login extends Component {
 
             if(response.data.success === true){
                 this.setState({
-                    email:'',password:'',redirect: true
+                    email:'',password:''
                 })
                 window.localStorage.setItem('token', response.data.token.token)
                 window.localStorage.setItem('username', response.data.username)
                 window.localStorage.setItem('image', response.data.image)
                 window.localStorage.setItem('user_id', response.data.user_id)
+                window.localStorage.setItem('rol_id', response.data.rol_id)
+
+                if(response.data.rol_id == 2){
+                    this.setState({
+                        redirectAdmin: true
+                    })
+                }else if(response.data.rol_id == 1){
+                    this.setState({
+                        redirectUser: true
+                    })
+                }
+
                 toast.success(response.data.message)
             }else{
 
@@ -120,13 +133,21 @@ class Login extends Component {
 
     render() {
 
-        if(this.state.redirect){
+        if(this.state.redirectUser == true){
             
             return (
-                <Redirect to="/dashboard" />
+                <Redirect push to="/dashboard" />
+            );
+
+        }else if(this.state.redirectAdmin == true){
+            
+            return (
+                <Redirect push to="/admin" />
             );
 
         }
+
+
 
         return (
             <div className="login">

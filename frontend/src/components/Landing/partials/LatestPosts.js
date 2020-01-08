@@ -34,6 +34,7 @@ class LatestPosts extends Component {
         }
 
         axios.get(process.env.REACT_APP_API_URL+"/cars/latest", config).then(response => {
+           
             this.setState({
                 posts: response.data
             })
@@ -80,7 +81,7 @@ class LatestPosts extends Component {
                                 <div className="col-md-12 col-xs-12 col-sm-12">
                             
                                     {this.state.posts.map((car, i) =>
-                                        <Card key={i} favorite={car.favorites} car_id={car.id} brand={car.model.brand.brand} model={car.model.model} price={car.price} image={car.image}/>
+                                        <Card key={i} favorite={car.favorites} car_id={car.id} brand={car.model.brand.brand} model={car.model.model} price={car.price} image={car.image} publish_date={car.created_at}/>
                                     )}
                                 
                                 </div>

@@ -12,6 +12,9 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import './Dashboard.css'
 
+import Moment from 'react-moment';
+import 'moment-timezone';
+
 
 class Dashboard extends Component {
 
@@ -51,7 +54,10 @@ class Dashboard extends Component {
             username:"",
             phone:"",
             userEditId:0,
-            favoritesCount:0
+            favoritesCount:0,
+            notificationsCount: 0,
+            countSales:0,
+            countBuy:0
         }
 
         this.openModal = this.openModal.bind(this)
@@ -70,6 +76,9 @@ class Dashboard extends Component {
         this.deleteConfirm = this.deleteConfirm.bind(this)
         this.updateProfile = this.updateProfile.bind(this)
         this.countFavorites = this.countFavorites.bind(this)
+        this.countNotifications = this.countNotifications.bind(this)
+        this.countSales = this.countSales.bind(this)
+        this.countBuy = this.countBuy.bind(this)
 
         this.handleBrandChange = this.handleBrandChange.bind(this)
         this.handleModelChange = this.handleModelChange.bind(this)
@@ -105,6 +114,7 @@ class Dashboard extends Component {
                 _this.setState({
                     auth: true
                 })
+                
     
             }).catch(error => {
                 _this.setState({
@@ -114,6 +124,9 @@ class Dashboard extends Component {
     
             _this.fetchCars()
             _this.countFavorites()
+            _this.countNotifications()
+            _this.countSales()
+            _this.countBuy()
 
         }, 200)
     
@@ -643,6 +656,66 @@ class Dashboard extends Component {
 
     }
 
+    countNotifications(){
+
+        let config = {
+            headers: {
+                Authorization: 'Bearer ' + window.localStorage.getItem('token'),
+            }
+        }
+
+        axios.get(process.env.REACT_APP_API_URL+"/notification/count", config).then(response => {
+            
+            this.setState({
+                notificationsCount: response.data.sales[0]['count(*)']
+            })
+
+        }).catch(error => {
+
+        })
+
+    }
+
+    countSales(){
+
+        let config = {
+            headers: {
+                Authorization: 'Bearer ' + window.localStorage.getItem('token'),
+            }
+        }
+
+        axios.get(process.env.REACT_APP_API_URL+"/sales/user/count",config).then(response => {
+            
+            this.setState({
+                countSales: response.data.salesCount[0]['count(*)']
+            })
+
+        }).catch(error => {
+
+        })
+
+    }
+
+    countBuy(){
+
+        let config = {
+            headers: {
+                Authorization: 'Bearer ' + window.localStorage.getItem('token'),
+            }
+        }
+
+        axios.get(process.env.REACT_APP_API_URL+"/buy/user/count",config).then(response => {
+            
+            this.setState({
+                countBuy: response.data.salesCount[0]['count(*)']
+            })
+
+        }).catch(error => {
+
+        })
+
+    }
+
 	render() {
 
         let imageEdit1
@@ -681,7 +754,7 @@ class Dashboard extends Component {
                                     <div className="search-result-item-body">
                                         <div className="row">
                                             <div className="col-md-5 col-sm-12 col-xs-12">
-                                                <h4 className="search-result-item-heading"><a href="#">Umair</a></h4>
+                                                <h4 className="search-result-item-heading"><a href="#">{window.localStorage.getItem('username')}</a></h4>
                                                 <p className="info">
                                                     <span><a href="profile.html"><i className="fa fa-user "></i>Profile </a></span>
                                                     <span><a href="#" onClick={() => this.openEditProfileModal()}><i className="fa fa-edit"></i>Edit Profile </a></span>
@@ -707,12 +780,31 @@ class Dashboard extends Component {
                                                             </div>
                                                         </Link>
                                                     </div>
-                                                    {/*<div className="col-md-4 col-sm-4 col-xs-12">
-                                                        <div className="user-stats">
-                                                            <h2>980</h2>
-                                                            <small>Total Listings</small>
-                                                        </div>
+                                                    <div className="col-md-4 col-sm-4 col-xs-12">
+                                                        <Link to="/dashboard/notifications">
+                                                            <div className="user-stats">
+                                                                <h2>{this.state.notificationsCount}</h2>
+                                                                <small>Notificaciones</small>
+                                                            </div>
+                                                        </Link>
                                                     </div>
+                                                    <div className="col-md-4 col-sm-4 col-xs-12">
+                                                        <Link to="/dashboard/user/bought-cars">
+                                                            <div className="user-stats">
+                                                                <h2>{this.state.countBuy}</h2>
+                                                                <small>Compras</small>
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                    <div className="col-md-4 col-sm-4 col-xs-12">
+                                                        <Link to="/dashboard/user/sold-cars">
+                                                            <div className="user-stats" style={{background: "#1abc9c"}}>
+                                                                <h2>{this.state.countSales}</h2>
+                                                                <small>Ventas</small>
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                    {/*
                                                     <div className="col-md-4 col-sm-4 col-xs-12">
                                                         <div className="user-stats">
                                                             <h2>413</h2>
@@ -753,7 +845,7 @@ class Dashboard extends Component {
                                                 </ul>*/}
                                             </div>
                                             <div className="ad-info-1">
-                                                <p><i className="flaticon-calendar"></i> &nbsp;<span>5 Days ago</span> </p>
+                                                <p><i className="flaticon-calendar"></i> &nbsp;<span><Moment locale="es" fromNow>{car.created_at}</Moment></span> </p>
                                                 <ul className="pull-right">
                                                     <li> <a href="#" onClick={() => this.deleteConfirm(car.id)}><i className="fa fa-trash"></i></a> </li>
                                                     <li> <a href="#" onClick={() => this.edit(car.id)}><i className="fa fa-edit"></i></a></li>

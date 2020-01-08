@@ -68,7 +68,7 @@ class Register extends Component {
             axios.post(process.env.REACT_APP_API_URL+"/register", {email: this.state.email, username:this.state.username, password: this.state.password, phone: this.state.phone})
             .then(response => {
                 
-                console.log(response.data)
+                //console.log(response.data)
 
                 if(response.data.success === true){
                     this.setState({
@@ -133,11 +133,11 @@ class Register extends Component {
                                             <input placeholder="Your Email" className="form-control" type="email" onChange={this.onFieldChange('email').bind(this)} value={this.state.email}/>
                                         </div>
                                         <div className="form-group">
-                                            <label>Password</label>
+                                            <label>Clave</label>
                                             <input placeholder="Your Password" className="form-control" type="password" onChange={this.onFieldChange('password').bind(this)} value={this.state.password}/>
                                         </div>
                                         <div className="form-group">
-                                            <label>Repeat Password</label>
+                                            <label>Repetir clave</label>
                                             <input placeholder="Repeat Your Password" className="form-control" type="password" onChange={this.onFieldChange('password_confirmation').bind(this)} value={this.state.password_confirmation}/>
                                         </div>
                                         <div className="form-group">
@@ -152,10 +152,10 @@ class Register extends Component {
                                                     </ul>
                                                     </div>
                                                 </div>
-                                                <div className="col-xs-12 col-sm-5 text-right">
+                                                {/*<div className="col-xs-12 col-sm-5 text-right">
                                                     <p className="help-block"><a data-target="#myModal" data-toggle="modal">Forgot password?</a>
                                                     </p>
-                                                </div>
+                                                </div>*/}
                                             </div>
                                         </div>
                                         <button className="btn btn-theme btn-lg btn-block" type="button" onClick={() => this.register()}>Register</button>
